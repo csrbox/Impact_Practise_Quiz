@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Organizer Settings – OPIF Impact Practice Quiz</title>
+  <meta name="description" content="Persistent kiosk game configuration for OPIF Masterclass stall organizers.">
+  <meta name="theme-color" content="#0b2545">
+
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .settings-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+      transition: all 0.2s ease;
+    }
+    .settings-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+    .settings-toggle-row:hover {
+      border-color: var(--brand-blue);
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.06);
+    }
+    .form-check-input {
+      width: 3.2em !important;
+      height: 1.8em !important;
+      cursor: pointer;
+    }
+    .form-check-input:checked {
+      background-color: var(--brand-emerald) !important;
+      border-color: var(--brand-emerald) !important;
+    }
+    .toast-saved {
+      position: fixed;
+      top: 90px;
+      right: 24px;
+      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+      color: #ffffff;
+      padding: 16px 22px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(6,95,70,0.3);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      animation: screenFadeIn 0.3s ease;
+    }
+  </style>
+</head>
+<body style="background-color: var(--bg-page);">
+
+  <!-- Ambient Background Accents -->
+  <div class="kiosk-bg-decoration"></div>
+
+  <!-- Top Navigation Header (Frozen / Fixed at Top) -->
+  <header class="kiosk-header">
+    <div class="header-inner">
+      <div class="brand-wrapper" onclick="window.location.href='../index.html'" style="cursor: pointer;" title="Return to Quiz Home">
+        <img src="../assets/impact-practice-logo.png" alt="Impact Practice Logo" class="logo-main">
+        <div class="header-partner">
+          <img src="../assets/csrbox.png" alt="CSRBOX" class="partner-logo">
+        </div>
+      </div>
+
+      <div class="header-pills">
+        <a href="../index.html" class="btn btn-outline-secondary rounded-pill px-3 py-1 font-heading btn-sm">
+          <i class="bi bi-arrow-left"></i> Back to Kiosk
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Viewport -->
+  <main class="main-content" style="max-width: 760px; padding: 24px 20px;">
+    
+    <!-- Title Area -->
+    <div class="mb-3 text-start">
+      <h1 class="font-heading fw-bold mb-1" style="font-size: 28px; color: var(--brand-navy);">
+        Stall Game Selection
+      </h1>
+      <p class="text-muted small mb-0">Toggle games active on the stall kiosk. Changes save automatically.</p>
+    </div>
+
+    <!-- Active Games Toggle Card (ONLY Section) -->
+    <div class="settings-card shadow-sm" style="border-radius: 24px; padding: 24px;">
+      <!-- Toggle 1: Trivia Quiz -->
+      <div class="settings-toggle-row">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 44px; height: 44px; border-radius: 14px; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #2563eb; flex-shrink: 0;">
+            <i class="bi bi-patch-question-fill"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">1. Trivia Quiz</strong>
+              <span class="badge bg-primary-subtle text-primary rounded-pill small">5 MCQs</span>
+            </div>
+            <div class="text-muted small mt-1">Section 135 legal compliance & thresholds.</div>
+          </div>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="setting-toggle-trivia" checked>
+        </div>
+      </div>
+
+      <!-- Toggle 2: Build the Chain -->
+      <div class="settings-toggle-row">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 44px; height: 44px; border-radius: 14px; background: #ecfdf5; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #059669; flex-shrink: 0;">
+            <i class="bi bi-diagram-3-fill"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">2. Build the Chain</strong>
+              <span class="badge bg-success-subtle text-success rounded-pill small">Results-Chain</span>
+            </div>
+            <div class="text-muted small mt-1">Theory of Change stage-sorting challenge.</div>
+          </div>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="setting-toggle-chain" checked>
+        </div>
+      </div>
+
+      <!-- Toggle 3: CSR or not-CSR? -->
+      <div class="settings-toggle-row">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 44px; height: 44px; border-radius: 14px; background: #f5f3ff; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #7c3aed; flex-shrink: 0;">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">3. CSR or not-CSR?</strong>
+              <span class="badge bg-purple-subtle text-purple rounded-pill small">5 Scenarios</span>
+            </div>
+            <div class="text-muted small mt-1">Schedule VII scenario assessments.</div>
+          </div>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="setting-toggle-csrcheck" checked>
+        </div>
+      </div>
+
+      <!-- Toggle 4: Guess The SDG -->
+      <div class="settings-toggle-row mb-0">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 44px; height: 44px; border-radius: 14px; background: #fff7ed; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ea580c; flex-shrink: 0;">
+            <i class="bi bi-bullseye"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">4. Guess The SDG</strong>
+              <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill small">3 Goals</span>
+            </div>
+            <div class="text-muted small mt-1">UN Sustainable Development Goals visual recognition.</div>
+          </div>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="setting-toggle-sdg" checked>
+        </div>
+      </div>
+    <!-- Cloud Database (Firebase Realtime Database) Sync Card -->
+    <div class="settings-card shadow-sm mt-3" style="border-radius: 24px; padding: 24px;">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #b45309; flex-shrink: 0;">
+            <i class="bi bi-cloud-check-fill"></i>
+          </div>
+          <div>
+            <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">Cloud Database Sync (Firebase RTDB)</strong>
+            <div class="text-muted small">₹0 Cost • Real-time live sync across all stall tablets & laptops.</div>
+          </div>
+        </div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 font-heading" id="firebase-status-badge">
+          Connected
+        </span>
+      </div>
+
+      <div class="mt-3">
+        <label class="form-label small fw-bold text-muted mb-1">Firebase Database URL</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="setting-firebase-url" placeholder="https://your-project-default-rtdb.firebaseio.com" style="border-radius: 12px 0 0 12px; font-family: monospace; font-size: 13.5px;">
+          <button class="btn btn-primary px-3" type="button" id="setting-firebase-save-btn" style="border-radius: 0 12px 12px 0;">
+            Save & Connect
+          </button>
+        </div>
+        <div class="text-muted small mt-2" style="font-size: 12px;">
+          <i class="bi bi-info-circle text-primary"></i> <strong>How to set up:</strong> Go to <a href="https://console.firebase.google.com/" target="_blank" class="fw-bold">console.firebase.google.com</a> &rarr; Create Project &rarr; Build &rarr; Realtime Database (Test mode) &rarr; Copy the URL and paste above.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Saved Notification Toast -->
+  <div class="toast-saved" id="setting-toast">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span id="setting-toast-msg">Configuration saved persistently!</span>
+  </div>
+
+  <script src="../js/firebase-sync.js"></script>
+  <script>
+    const ORGANIZER_PIN = "333";
+    const SETTINGS_KEY = 'OPIF_GAME_SETTINGS';
+    const RECORDS_KEY = 'OPIF_QUIZ_RECORDS';
+
+    function getSettings() {
+      const defaults = { trivia: true, chain: true, csrcheck: true, sdg: true };
+      try {
+        const saved = localStorage.getItem(SETTINGS_KEY);
+        return saved ? { ...defaults, ...JSON.parse(saved) } : defaults;
+      } catch (e) {
+        return defaults;
+      }
+    }
+
+    function saveSettings(settings) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      showToast("Configuration saved persistently!");
+      updateSummaryText(settings);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('setting-toast');
+      const msgEl = document.getElementById('setting-toast-msg');
+      if (msgEl) msgEl.textContent = msg;
+      if (toast) {
+        toast.style.display = 'flex';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 3000);
+      }
+    }
+
+    function updateSummaryText(settings) {
+      const summaryEl = document.getElementById('setting-status-summary');
+      if (!summaryEl) return;
+      const activeCount = [settings.trivia, settings.chain, settings.csrcheck, settings.sdg].filter(Boolean).length;
+      if (activeCount === 4) {
+        summaryEl.textContent = "All 4 interactive games are active on the kiosk home screen.";
+      } else if (activeCount === 0) {
+        summaryEl.textContent = "Warning: No games active. Please enable at least one game!";
+      } else {
+        summaryEl.textContent = `${activeCount} of 4 games active on the kiosk home screen.`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const settings = getSettings();
+
+      const toggleTrivia = document.getElementById('setting-toggle-trivia');
+      const toggleChain = document.getElementById('setting-toggle-chain');
+      const toggleCsrCheck = document.getElementById('setting-toggle-csrcheck');
+      const toggleSdg = document.getElementById('setting-toggle-sdg');
+
+      if (toggleTrivia) toggleTrivia.checked = settings.trivia;
+      if (toggleChain) toggleChain.checked = settings.chain;
+      if (toggleCsrCheck) toggleCsrCheck.checked = settings.csrcheck;
+      if (toggleSdg) toggleSdg.checked = settings.sdg;
+
+      updateSummaryText(settings);
+
+      function handleToggleChange() {
+        const newSettings = {
+          trivia: toggleTrivia.checked,
+          chain: toggleChain.checked,
+          csrcheck: toggleCsrCheck.checked,
+          sdg: toggleSdg.checked
+        };
+
+        // Guarantee at least one game remains selected
+        if (!newSettings.trivia && !newSettings.chain && !newSettings.csrcheck && !newSettings.sdg) {
+          alert("At least one game must remain active on the stall kiosk.");
+          this.checked = true;
+          return;
+        }
+
+        saveSettings(newSettings);
+      }
+
+      if (toggleTrivia) toggleTrivia.addEventListener('change', handleToggleChange);
+      if (toggleChain) toggleChain.addEventListener('change', handleToggleChange);
+      if (toggleCsrCheck) toggleCsrCheck.addEventListener('change', handleToggleChange);
+      if (toggleSdg) toggleSdg.addEventListener('change', handleToggleChange);
+
+      // Firebase Sync URL Binding
+      const fbUrlInput = document.getElementById('setting-firebase-url');
+      const fbSaveBtn = document.getElementById('setting-firebase-save-btn');
+      if (fbUrlInput && window.FirebaseSync) {
+        fbUrlInput.value = window.FirebaseSync.getUrl();
+      }
+      if (fbSaveBtn && fbUrlInput) {
+        fbSaveBtn.addEventListener('click', () => {
+          const val = fbUrlInput.value.trim();
+          if (val && !val.startsWith('http')) {
+            alert('Please enter a valid URL starting with https://');
+            return;
+          }
+          if (window.FirebaseSync) {
+            window.FirebaseSync.setUrl(val);
+          }
+          showToast('Firebase Database URL updated!');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

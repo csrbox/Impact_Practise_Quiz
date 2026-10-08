@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>OPIF – Impact Practice Quiz</title>
+  <meta name="description"
+    content="Stall-ready interactive CSR and Results-Chain quiz experience for OPIF Masterclass by Impact Practice and CSRBOX.">
+  <meta name="theme-color" content="#0b2545">
+
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Custom Application Styling -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Ambient Background Accents -->
+  <div class="kiosk-bg-decoration"></div>
+
+  <!-- Confetti / Fireworks Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Master App Container -->
+  <div class="app-container">
+
+    <!-- Top Navigation Header -->
+    <header class="kiosk-header">
+      <div class="header-inner">
+        <!-- Brand & Logos -->
+        <div class="brand-wrapper" id="brand-home-link" title="Return to Home">
+          <img src="assets/impact-practice-logo.png" alt="Impact Practice Logo" class="logo-main" id="header-logo-ip">
+          <div class="header-partner">
+            <img src="assets/csrbox.png" alt="CSRBOX" class="partner-logo" id="header-logo-csrbox">
+          </div>
+        </div>
+
+        <!-- Header Actions & Kiosk Utilities -->
+        <div class="header-pills">
+          <!-- Active Participant Badge -->
+          <div id="header-participant-badge" class="participant-badge" style="display: none;">
+            <i class="bi bi-person-check-fill"></i>
+            <span id="header-participant-name">Participant</span>
+          </div>
+
+          <!-- Leaderboard Button -->
+          <a href="#" class="live-stats-btn" id="header-stats-btn" title="View stall leaderboard">
+            <i class="bi bi-trophy-fill text-warning me-1"></i>
+            <span id="header-stats-text">Leaderboard</span>
+          </a>
+
+          <!-- Sound Mute/Unmute Toggle -->
+          <button type="button" class="kiosk-tool-btn" id="sound-toggle-btn" title="Toggle Sound">
+            <i class="bi bi-volume-up-fill"></i>
+          </button>
+
+          <!-- Fullscreen Kiosk Mode -->
+          <button type="button" class="kiosk-tool-btn" id="fullscreen-toggle-btn" title="Toggle Fullscreen Kiosk">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Viewport Area -->
+    <main class="main-content">
+
+      <!-- ====================================================================
+           SCREEN 1: WELCOME SCREEN
+           ==================================================================== -->
+      <section id="screen-welcome" class="screen-view active">
+        <div class="welcome-container">
+          <div class="welcome-hero-card">
+            <!-- Impact Practice Logo -->
+            <img src="assets/impact-practice-logo.png" alt="IMPACT PRACTICE" class="welcome-logo-large">
+
+            <div>
+              <span class="hero-pill-badge">
+                <i class="bi bi-stars"></i> OPIF Masterclass Stall Interactive
+              </span>
+            </div>
+
+            <h1 class="headline-hero">Think. Play. Learn.</h1>
+            <p class="headline-sub mx-auto mt-3">
+              Test your CSR knowledge or build the chain from action to impact.
+            </p>
+
+            <!-- Preview Mini Cards for the 4 Games -->
+            <div class="welcome-features">
+              <div class="feature-mini-card">
+                <div class="feature-icon-box">
+                  <i class="bi bi-patch-question-fill"></i>
+                </div>
+                <div>
+                  <div class="feature-title">Trivia Quiz</div>
+                  <div class="feature-badge-mini">5 Questions</div>
+                </div>
+              </div>
+
+              <div class="feature-mini-card">
+                <div class="feature-icon-box" style="background: #ecfdf5; color: #059669;">
+                  <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                  <div class="feature-title">Build the Chain</div>
+                  <div class="feature-badge-mini">Results-Chain</div>
+                </div>
+              </div>
+
+              <div class="feature-mini-card">
+                <div class="feature-icon-box" style="background: #faf5ff; color: #7c3aed;">
+                  <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                  <div class="feature-title">CSR or not-CSR?</div>
+                  <div class="feature-badge-mini">5 Scenarios</div>
+                </div>
+              </div>
+
+              <div class="feature-mini-card">
+                <div class="feature-icon-box" style="background: #fff7ed; color: #ea580c;">
+                  <i class="bi bi-bullseye"></i>
+                </div>
+                <div>
+                  <div class="feature-title">Guess The SDG</div>
+                  <div class="feature-badge-mini">3 Goals</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Start CTA -->
+            <div>
+              <button type="button" class="btn-kiosk-primary" id="btn-start-challenge">
+                START THE CHALLENGE <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 2: PARTICIPANT DETAILS SCREEN (10-Digit Phone Validation)
+           ==================================================================== -->
+      <section id="screen-details" class="screen-view">
+        <div class="form-screen-wrap">
+          <div class="kiosk-card">
+            <div class="form-header-area">
+              <span class="badge bg-primary-subtle text-primary border px-3 py-2 rounded-pill font-heading mb-2">
+                Step 1 of 2
+              </span>
+              <h2 class="font-heading fw-bold" style="font-size: 28px; color: var(--brand-navy);">Welcome to the OPIF
+                Quiz</h2>
+              <p class="text-muted mt-2" style="font-size: 14.5px;">
+                Enter your details once. You can play all challenges with this profile.
+              </p>
+            </div>
+
+            <form id="participant-form" novalidate>
+              <!-- Organization Type (Profit / Non-Profit) -->
+              <div class="form-input-group">
+                <label class="form-label-kiosk">
+                  <span>Organization Type</span>
+                  <span class="badge-required">* Required</span>
+                </label>
+                <div class="org-radio-group">
+                  <label class="org-radio-card active" id="label-org-profit">
+                    <input type="radio" name="participant-org-type" value="Profit" checked>
+                    <div class="org-radio-icon">
+                      <i class="bi bi-buildings-fill"></i>
+                    </div>
+                    <div class="org-radio-text">
+                      <strong>Profit</strong>
+                    </div>
+                    <div class="org-radio-check"><i class="bi bi-check-circle-fill"></i></div>
+                  </label>
+
+                  <label class="org-radio-card" id="label-org-nonprofit">
+                    <input type="radio" name="participant-org-type" value="Non-Profit">
+                    <div class="org-radio-icon">
+                      <i class="bi bi-heart-fill"></i>
+                    </div>
+                    <div class="org-radio-text">
+                      <strong>Non-Profit</strong>
+                    </div>
+                    <div class="org-radio-check"><i class="bi bi-check-circle-fill"></i></div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Company Name -->
+              <div class="form-input-group">
+                <label for="participant-company" class="form-label-kiosk">
+                  <span>Company Name</span>
+                  <span class="badge-optional">(Optional)</span>
+                </label>
+                <input type="text" id="participant-company" class="input-kiosk"
+                  placeholder="e.g. Tata, Infosys, Reliance, CSRBOX, etc." autocomplete="organization">
+              </div>
+
+              <!-- Name Input -->
+              <div class="form-input-group">
+                <label for="participant-name" class="form-label-kiosk">
+                  <span>Full Name</span>
+                  <span class="badge-required">* Required</span>
+                </label>
+                <input type="text" id="participant-name" class="input-kiosk" placeholder="e.g. Priya Sharma" required
+                  autocomplete="name">
+                <div class="invalid-feedback">Please enter your name to proceed.</div>
+              </div>
+
+              <!-- Email Input -->
+              <div class="form-input-group">
+                <label for="participant-email" class="form-label-kiosk">
+                  <span>Email Address</span>
+                  <span class="badge-required">* Required</span>
+                </label>
+                <input type="email" id="participant-email" class="input-kiosk" placeholder="e.g. priya@organization.org"
+                  required autocomplete="email">
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <!-- Phone Input (Strict 10 digits validation) -->
+              <div class="form-input-group">
+                <label for="participant-phone" class="form-label-kiosk">
+                  <span>Phone Number</span>
+                  <span class="badge-optional">(Optional, 10 Digits)</span>
+                </label>
+                <input type="tel" id="participant-phone" class="input-kiosk" placeholder="e.g. 9876543210"
+                  maxlength="10" autocomplete="tel">
+                <div class="invalid-feedback" id="participant-phone-error">Phone number must be exactly 10 digits.</div>
+                <div class="input-hint">Enter your 10-digit mobile number for stall updates & prizes.</div>
+              </div>
+
+              <!-- Privacy Guarantee Note -->
+              <div class="privacy-notice-box">
+                <i class="bi bi-shield-check text-primary fs-5"></i>
+                <span>Your contact details are kept strictly private and never displayed on public stall boards.</span>
+              </div>
+
+              <button type="submit" class="btn-kiosk-primary w-100" id="btn-submit-details">
+                CONTINUE TO CHALLENGE <i class="bi bi-arrow-right"></i>
+              </button>
+
+              <!-- Secret Guest Skip Bypass Notification Area -->
+              <div class="quick-guest-bypass-area text-center mt-3" id="guest-mode-trigger"></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 3: GAME SELECTION SCREEN (4 Interactive Games)
+           ==================================================================== -->
+      <section id="screen-selection" class="screen-view">
+        <div class="selection-container">
+          <span class="badge bg-primary-subtle text-primary border px-3 py-2 rounded-pill font-heading mb-2">
+            Step 2 of 2
+          </span>
+          <h2 class="font-heading fw-bold" style="font-size: 32px; color: var(--brand-navy);">Choose Your Challenge</h2>
+          <p class="text-muted mt-2 mx-auto" style="font-size: 15.5px; max-width: 650px;">
+            Select any interactive game to test your expertise. You can play all 4 challenges during your stall visit!
+          </p>
+
+          <div class="game-cards-grid">
+            <!-- Game 1: TRIVIA QUIZ -->
+            <div class="game-choice-card card-theme-trivia" id="choice-card-trivia">
+              <div>
+                <div class="game-card-badge">
+                  <i class="bi bi-lightbulb-fill"></i> Legal & Governance
+                </div>
+                <div class="game-card-icon-wrap">
+                  <i class="bi bi-file-earmark-check-fill"></i>
+                </div>
+                <h3 class="game-card-title">TRIVIA QUIZ</h3>
+              </div>
+
+              <div class="game-card-footer">
+                <div class="game-meta-tag">
+                  <i class="bi bi-clock-history"></i> 5 Questions • 5 Marks
+                </div>
+                <div class="game-play-arrow">
+                  <i class="bi bi-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game 2: BUILD THE CHAIN -->
+            <div class="game-choice-card card-theme-chain" id="choice-card-chain">
+              <div>
+                <div class="game-card-badge">
+                  <i class="bi bi-diagram-3-fill"></i> Results Chain Simulation
+                </div>
+                <div class="game-card-icon-wrap">
+                  <i class="bi bi-link-45deg"></i>
+                </div>
+                <h3 class="game-card-title">BUILD THE CHAIN</h3>
+              </div>
+
+              <div class="game-card-footer">
+                <div class="game-meta-tag">
+                  <i class="bi bi-cpu"></i> 12 Sectors • 5 Marks
+                </div>
+                <div class="game-play-arrow">
+                  <i class="bi bi-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game 3: CSR OR NOT-CSR? -->
+            <div class="game-choice-card card-theme-csrcheck" id="choice-card-csrcheck">
+              <div>
+                <div class="game-card-badge">
+                  <i class="bi bi-shield-check"></i> Scenario Classifier
+                </div>
+                <div class="game-card-icon-wrap">
+                  <i class="bi bi-patch-question-fill"></i>
+                </div>
+                <h3 class="game-card-title">CSR OR NOT-CSR?</h3>
+              </div>
+
+              <div class="game-card-footer">
+                <div class="game-meta-tag">
+                  <i class="bi bi-journal-text"></i> 5 Scenarios • 5 Marks
+                </div>
+                <div class="game-play-arrow">
+                  <i class="bi bi-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game 4: GUESS THE SDG -->
+            <div class="game-choice-card card-theme-sdg" id="choice-card-sdg">
+              <div>
+                <div class="game-card-badge">
+                  <i class="bi bi-globe-americas"></i> UN Global Goals
+                </div>
+                <div class="game-card-icon-wrap">
+                  <i class="bi bi-bullseye"></i>
+                </div>
+                <h3 class="game-card-title">GUESS THE SDG</h3>
+              </div>
+
+              <div class="game-card-footer">
+                <div class="game-meta-tag">
+                  <i class="bi bi-stars"></i> 3 Goals • 3 Marks
+                </div>
+                <div class="game-play-arrow">
+                  <i class="bi bi-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 1 SCREEN: TRIVIA QUIZ (5 Questions)
+           ==================================================================== -->
+      <section id="screen-trivia" class="screen-view">
+        <div class="quiz-container">
+          <div class="quiz-header-bar">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 btn-sm" id="trivia-back-btn">
+              <i class="bi bi-arrow-left"></i> Games
+            </button>
+            <div class="quiz-progress-text" id="trivia-progress-text">Question 1 of 5</div>
+          </div>
+
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-fill" id="trivia-progress-fill" style="width: 20%;"></div>
+          </div>
+
+          <div class="question-box">
+            <div class="question-label">CSR Statutory Compliance • Companies Act 2013</div>
+            <h3 class="question-title" id="trivia-question-title">
+              Loading question...
+            </h3>
+          </div>
+
+          <div class="options-list" id="trivia-options-container">
+            <!-- Dynamic options -->
+          </div>
+
+          <div class="quiz-explanation-box" id="trivia-explanation-box" style="display: none;">
+            <i class="bi bi-info-circle-fill fs-5 mt-1"></i>
+            <div id="trivia-explanation-text"></div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn-kiosk-primary" id="trivia-next-btn" style="display: none;">
+              NEXT QUESTION <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 2 SCREEN A: BUILD THE CHAIN - SECTOR SELECTION
+           ==================================================================== -->
+      <section id="screen-chain-sector" class="screen-view">
+        <div class="selection-container" style="max-width: 1100px;">
+          <div class="chain-nav-bar">
+            <div class="chain-breadcrumbs">
+              <button type="button" onclick="window.opifApp.showScreen('screen-selection')">
+                <i class="bi bi-arrow-left"></i> Back to Game Selection
+              </button>
+              <span>/</span>
+              <span class="text-dark fw-bold">Build the Chain</span>
+            </div>
+          </div>
+
+          <div class="text-start mt-2 mb-3">
+            <h3 class="font-heading fw-bold" style="color: var(--brand-navy); font-size: 24px;">
+              Explore Programmes by Sector
+            </h3>
+            <p class="text-muted" style="font-size: 15px;">
+              Select a sector below to reconstruct the results chain for any programme.
+            </p>
+          </div>
+
+          <!-- 12 Sectors Grid -->
+          <div class="sectors-grid" id="sectors-grid">
+            <!-- Injected by chain-game.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 2 SCREEN B: BUILD THE CHAIN - PROGRAMME SELECTION
+           ==================================================================== -->
+      <section id="screen-chain-programme" class="screen-view">
+        <div class="quiz-container">
+          <div class="chain-nav-bar">
+            <div class="chain-breadcrumbs">
+              <button type="button" id="btn-back-to-sectors">
+                <i class="bi bi-arrow-left"></i> All Sectors
+              </button>
+              <span>/</span>
+              <span class="text-dark fw-bold" id="programme-sector-title">Programmes</span>
+            </div>
+          </div>
+
+          <p class="text-muted mb-4">
+            Select an initiative below to reconstruct its impact pathway from on-ground activity to long-term impact.
+          </p>
+
+          <div class="programmes-list" id="programmes-list">
+            <!-- Injected by chain-game.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 2 SCREEN C: BUILD THE CHAIN - BOARD (Options at Top, Slots Below)
+           ==================================================================== -->
+      <section id="screen-chain-board" class="screen-view">
+        <div class="chain-board-wrap">
+          <!-- Compact Header Bar (Clean, no single exploration tag) -->
+          <div class="chain-prog-compact-header">
+            <div>
+              <h3 class="font-heading fw-bold mb-1" id="chain-board-prog-title"
+                style="color: var(--brand-navy); font-size: 22px;">
+                Programme Name
+              </h3>
+              <p class="text-muted small mb-2" id="chain-board-prog-blurb">
+                Programme description
+              </p>
+              <div class="stakeholder-pills" id="chain-board-stakeholders">
+                <!-- Colored stakeholder pills -->
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm px-3" id="btn-back-from-board">
+              <i class="bi bi-arrow-left"></i> Change Programme
+            </button>
+          </div>
+
+          <!-- TOP OPTIONS BANK (Placed directly above the chain slots) -->
+          <div class="top-options-bank" id="top-options-bank">
+            <div class="bank-header-title">
+              <span class="fw-bold font-heading" style="color: var(--brand-navy); font-size: 15px;">
+                <i class="bi bi-collection-fill text-primary"></i> Available Stage Options (Tap to Select or Drag Below)
+              </span>
+              <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 small">
+                Unplaced Cards
+              </span>
+            </div>
+            <div class="bank-cards-grid" id="bank-cards-grid">
+              <!-- Movable cards rendered here -->
+            </div>
+          </div>
+
+          <!-- 4 CHAIN SLOTS BELOW -->
+          <div class="chain-slots-column" id="chain-slots-column">
+            <!-- 4 Drop Zones with Downward Arrows -->
+          </div>
+
+          <!-- Chain Summary Bar (Appears after submission) -->
+          <div class="chain-summary-feedback" id="chain-summary-feedback-box" style="display: none;">
+            <div>
+              <div class="fs-5 fw-bold text-dark" id="chain-summary-score-text">
+                Stage Placement Score: 4 / 4 Marks
+              </div>
+              <div class="text-muted small">
+                Review the tags on the right of each stage above. Now answer the follow-up indicator question to finish
+                with 5 marks!
+              </div>
+            </div>
+            <button type="button" class="btn-kiosk-primary" id="btn-continue-to-indicator"
+              style="min-height: 52px; white-space: nowrap;">
+              CONTINUE TO INDICATOR QUESTION (1 MARK) <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Controls Bottom Bar -->
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-2">
+            <div class="text-muted small">
+              <i class="bi bi-info-circle"></i> Place all 4 stages into DO/WE, Output, Outcome, Impact to submit.
+            </div>
+            <button type="button" class="btn-kiosk-primary" id="chain-submit-btn">
+              SUBMIT CHAIN <i class="bi bi-check2-circle"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 2 SCREEN D: BONUS OUTCOME INDICATOR QUESTION (1 Mark -> Total 5)
+           ==================================================================== -->
+      <section id="screen-chain-indicator" class="screen-view">
+        <div class="indicator-step-container">
+          <div class="kiosk-card">
+            <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill mb-2">
+              FINAL QUESTION • 1 MARK
+            </span>
+            <h3 class="font-heading fw-bold mb-1" id="ind-prog-title" style="color: var(--brand-navy);">
+              Programme Outcome Indicator
+            </h3>
+            <p class="text-muted mb-3" style="font-size: 15px;">
+              For the Outcome: <strong id="ind-outcome-text" class="text-dark">Outcome text</strong>, which indicator is
+              the most credible and defensible to prove change to a funder?
+            </p>
+
+            <div id="ind-options-container" class="mt-4">
+              <!-- 3 indicator cards injected by chain-game.js -->
+            </div>
+
+            <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+              <button type="button" class="btn-kiosk-primary" id="btn-finish-challenge" style="display: none;">
+                FINISH CHALLENGE & VIEW FINAL SCORE <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 3 SCREEN: CSR OR NOT-CSR? (5 Questions)
+           ==================================================================== -->
+      <section id="screen-csrcheck" class="screen-view">
+        <div class="quiz-container">
+          <div class="quiz-header-bar">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 btn-sm"
+              id="csrcheck-back-btn">
+              <i class="bi bi-arrow-left"></i> Games
+            </button>
+            <div class="quiz-progress-text" id="csrcheck-progress-text">Question 1 of 5</div>
+          </div>
+
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-fill" id="csrcheck-progress-fill" style="width: 20%;"></div>
+          </div>
+
+          <div class="question-box">
+            <div class="question-label">Corporate Compliance • Schedule VII Mandate</div>
+            <h3 class="question-title fs-4" id="csrcheck-prompt-title">
+              Loading question...
+            </h3>
+          </div>
+
+          <div class="options-grid-duo" id="csrcheck-options-container">
+            <!-- 2 Big Column-Wise Choice Buttons (Side-by-Side, Zero Scroll) -->
+          </div>
+
+          <div class="quiz-explanation-box" id="csrcheck-explanation-box" style="display: none;">
+            <i class="bi bi-info-circle-fill fs-5 mt-1"></i>
+            <div id="csrcheck-explanation-text"></div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn-kiosk-primary" id="csrcheck-next-btn" style="display: none;">
+              NEXT QUESTION <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           GAME 4 SCREEN: GUESS THE SDG (3 Official UN Global Goals • 3 Marks)
+           ==================================================================== -->
+      <section id="screen-sdg" class="screen-view">
+        <div class="quiz-container">
+          <div class="quiz-header-bar">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1 btn-sm" id="sdg-back-btn">
+              <i class="bi bi-arrow-left"></i> Games
+            </button>
+            <div class="quiz-progress-text" id="sdg-progress-text">Goal 1 of 3</div>
+          </div>
+
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-fill" id="sdg-progress-fill" style="width: 33%;"></div>
+          </div>
+
+          <!-- Featured UN SDG Visual Tile -->
+          <div class="sdg-featured-display-card" id="sdg-visual-tile">
+            <!-- Injected by sdg-game.js -->
+          </div>
+
+          <div class="options-grid-2x2" id="sdg-options-container">
+            <!-- 4 Option Cards Injected by sdg-game.js -->
+          </div>
+
+          <div class="quiz-explanation-box" id="sdg-explanation-box" style="display: none;">
+            <i class="bi bi-info-circle-fill fs-5 mt-1"></i>
+            <div id="sdg-explanation-text"></div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-2" id="sdg-next-container">
+            <button type="button" class="btn-kiosk-primary" id="sdg-next-btn" style="display: none;">
+              NEXT GOAL <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 8: RESULT & CELEBRATION (Out of 5 Marks + Fireworks for 5/5)
+           ==================================================================== -->
+      <section id="screen-result" class="screen-view">
+        <div class="result-card-wrap">
+          <div class="celebration-box" id="celebration-box-wrap">
+            <div class="trophy-visual" id="result-trophy-icon">
+              <i class="bi bi-trophy-fill"></i>
+            </div>
+
+            <div class="result-badge-top" id="result-badge-text">
+              <i class="bi bi-award-fill"></i> CHALLENGE COMPLETE
+            </div>
+
+            <div class="result-score-callout">
+              <span class="score-num" id="result-score-num">5</span>
+              <span class="score-denom" id="result-score-denom">/5</span>
+            </div>
+
+            <h2 class="result-title" id="result-title">CHAMPION!</h2>
+            <p class="result-message" id="result-message">
+              Outstanding work! You demonstrated complete mastery.
+            </p>
+
+            <!-- ZCZP Educational Deep Dive Button (for Game 3 or on result) -->
+            <div id="result-zczp-cta-box" class="mb-4" style="display: none;">
+              <button type="button" class="btn btn-outline-primary rounded-pill px-4 py-2 font-heading fw-bold"
+                id="btn-explore-zczp">
+                <i class="bi bi-lightbulb"></i> Explore more about ZCZPs…
+              </button>
+            </div>
+
+            <div class="result-action-btns">
+              <button type="button" class="btn-kiosk-primary w-100" id="result-btn-play-again"
+                data-last-game="Trivia Quiz">
+                PLAY AGAIN <i class="bi bi-arrow-clockwise"></i>
+              </button>
+
+              <button type="button" class="btn-kiosk-secondary w-100" id="result-btn-choose-other">
+                TRY ANOTHER GAME <i class="bi bi-controller"></i>
+              </button>
+
+              <button type="button" class="btn btn-link text-muted mt-2" id="result-btn-new-participant">
+                <i class="bi bi-person-plus"></i> Next Stall Participant / Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 9: STALL LEADERBOARD & SUMMARY SCOREBOARD
+           ==================================================================== -->
+      <section id="screen-dashboard" class="screen-view">
+        <div class="selection-container" style="max-width: 1100px;">
+          
+          <!-- Top Header Wrap -->
+          <div class="dash-header-wrap">
+            <div>
+              <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm px-3 mb-2"
+                id="dash-back-home-btn">
+                <i class="bi bi-arrow-left"></i> Return to Quiz Home
+              </button>
+              <h2 class="font-heading fw-bold mb-1" style="font-size: 28px; color: var(--brand-navy);">
+                Stall Leaderboard 🏆
+              </h2>
+              <p class="text-muted small mb-0">
+                Live participant rankings and scores synced across all stall devices in real-time.
+              </p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <span
+                class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill font-heading"
+                id="dash-public-badge">
+                <span class="live-pulse"></span> Leaderboard Active
+              </span>
+            </div>
+          </div>
+
+          <!-- SECTION 1: LEADERBOARD TABLE (TOP - FIRST ON SCREEN) -->
+          <div class="kiosk-card p-4 mt-2 mb-4 shadow-sm" style="border-radius: 24px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="font-heading fw-bold mb-0" style="color: var(--brand-navy); font-size: 19px;">
+                <i class="bi bi-trophy-fill text-warning me-2"></i> Participant Leaderboard
+              </h4>
+              <span class="text-muted small">
+                <i class="bi bi-shield-check text-success"></i> Synced Live via Cloud Database
+              </span>
+            </div>
+
+            <!-- Scrollable Table Container with Sticky Headers (Fits ~20 rows cleanly) -->
+            <div class="table-scroll-container">
+              <table class="activity-feed-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%; text-align: center;">#</th>
+                    <th style="width: 36%; text-align: left;">Participant</th>
+                    <th style="width: 26%; text-align: center;">Game Played</th>
+                    <th style="width: 15%; text-align: center;">Score</th>
+                    <th style="width: 15%; text-align: center;">Time</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-activity-tbody">
+                  <!-- Real attendee rows with Serial Number 1, 2, 3... -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+              <span class="text-muted small">
+                <i class="bi bi-arrow-repeat"></i> Auto-refreshing across all stall tablets & screens.
+              </span>
+              <button type="button" class="btn btn-link text-danger btn-sm p-0" id="dash-reset-data-btn">
+                Clear Stall Data
+              </button>
+            </div>
+          </div>
+
+          <!-- SECTION 2: SCOREBOARD SUMMARY STATS (BOTTOM - BELOW LEADERBOARD) -->
+          <div class="mb-2">
+            <h5 class="font-heading fw-bold text-muted small text-uppercase letter-spacing-1 mb-2">
+              <i class="bi bi-graph-up"></i> Stall Engagement Scoreboard
+            </h5>
+          </div>
+
+          <div class="dash-stats-grid">
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">Total Participants</div>
+              <div class="dash-stat-value" id="dash-total-participants">0</div>
+              <div class="dash-stat-sub">Unique attendees registered</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">Today's Visitors</div>
+              <div class="dash-stat-value text-primary" id="dash-today-count">0</div>
+              <div class="dash-stat-sub">Active stall visitors today</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">Total Game Plays</div>
+              <div class="dash-stat-value text-success" id="dash-total-plays">0</div>
+              <div class="dash-stat-sub">All completed kiosk challenges</div>
+            </div>
+
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">100% Champions</div>
+              <div class="dash-stat-value text-warning" id="dash-champions-count">0</div>
+              <div class="dash-stat-sub">Flawless perfect scores 🏆</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ====================================================================
+       ZCZP EDUCATIONAL MODAL (Explore more about ZCZPs)
+       ==================================================================== -->
+  <div class="zczp-modal-overlay" id="zczp-modal">
+    <div class="zczp-modal-card">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <span class="badge bg-purple-subtle text-purple px-3 py-1 rounded-pill small fw-bold mb-1">
+            Social Stock Exchange (SSE)
+          </span>
+          <h3 class="font-heading fw-bold mb-1" style="color: var(--brand-navy); font-size: 24px;">
+            Zero Coupon Zero Principal (ZCZP) Instruments
+          </h3>
+          <p class="text-muted small mb-0">
+            SEBI & MCA Regulatory Framework for Social Sector Finance
+          </p>
+        </div>
+        <button type="button" class="btn-close" id="btn-close-zczp-modal" aria-label="Close"></button>
+      </div>
+
+      <div class="mt-3">
+        <div class="p-3 mb-3 bg-light rounded-3 border-start border-4 border-primary">
+          <h5 class="fw-bold fs-6 mb-1 text-primary">What is a ZCZP?</h5>
+          <p class="mb-0 small text-dark">
+            Zero Coupon Zero Principal instruments are specialized securities listed on the Social Stock Exchange (SSE).
+            They carry zero interest and zero principal repayment, acting as formal, audited philanthropic grants for
+            Non-Profit Organizations (NPOs).
+          </p>
+        </div>
+
+        <div class="p-3 mb-3 bg-light rounded-3 border-start border-4 border-success">
+          <h5 class="fw-bold fs-6 mb-1 text-success">Why are CSR Foundations Subscribing?</h5>
+          <p class="mb-0 small text-dark">
+            Subscription to ZCZPs guarantees standardized exchange disclosures, audited fund utilization, mandatory
+            Social Audit reports, and verifiable outcome tracking, eliminating reporting opacity.
+          </p>
+        </div>
+
+        <div class="p-3 mb-3 bg-light rounded-3 border-start border-4 border-warning">
+          <h5 class="fw-bold fs-6 mb-1 text-warning">Is it Eligible Under Indian CSR Law?</h5>
+          <p class="mb-0 small text-dark">
+            <strong>Yes!</strong> The Ministry of Corporate Affairs (MCA) has officially confirmed that corporates
+            subscribing to ZCZP instruments issued by eligible registered NPOs can account for it as legitimate CSR
+            spend under Section 135 and Schedule VII.
+          </p>
+        </div>
+
+        <div class="p-3 bg-primary-subtle rounded-3 text-dark small">
+          <i class="bi bi-award-fill text-primary"></i> <strong>Impact Practice Guidance:</strong> We help CSR leaders
+          assess SSE-listed projects, verify Theories of Change, and monitor milestone-based social outcomes.
+        </div>
+      </div>
+
+      <div class="text-end mt-4">
+        <button type="button" class="btn btn-secondary rounded-pill px-4"
+          onclick="document.getElementById('zczp-modal').style.display='none'">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: Modular 4-Game Architecture -->
+  <script src="js/firebase-sync.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/trivia-quiz.js"></script>
+  <script src="js/chain-game.js"></script>
+  <script src="js/csr-check-game.js"></script>
+  <script src="js/sdg-game.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+
+</html>
