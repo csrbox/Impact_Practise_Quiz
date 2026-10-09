@@ -17,7 +17,7 @@ const FirebaseSync = {
       if (custom && custom.trim().startsWith("http")) {
         return custom.trim().replace(/\/+$/, "");
       }
-    } catch (e) {}
+    } catch (e) { }
     return FIREBASE_DEFAULT_URL;
   },
 
@@ -31,7 +31,7 @@ const FirebaseSync = {
       } else {
         localStorage.removeItem(STORAGE_KEY_FIREBASE);
       }
-    } catch (e) {}
+    } catch (e) { }
   },
 
   /**
@@ -117,7 +117,7 @@ const FirebaseSync = {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(rec)
-          }).catch(() => {});
+          }).catch(() => { });
         });
       }
 
@@ -127,7 +127,7 @@ const FirebaseSync = {
 
       try {
         localStorage.setItem(STORAGE_KEY_RECORDS, JSON.stringify(merged));
-      } catch (e) {}
+      } catch (e) { }
       return merged;
     }
 
@@ -142,7 +142,7 @@ const FirebaseSync = {
   async clearAll() {
     try {
       localStorage.removeItem(STORAGE_KEY_RECORDS);
-    } catch (e) {}
+    } catch (e) { }
 
     const baseUrl = this.getUrl();
     if (baseUrl) {

@@ -331,33 +331,53 @@ class KioskApp {
     canvas.height = window.innerHeight;
 
     const particles = [];
-    const colors = ['#f59e0b', '#ef4444', '#10b981', '#2563eb', '#8b5cf6', '#ec4899', '#fbbf24', '#ffffff'];
+    const colors = ['#f59e0b', '#ef4444', '#10b981', '#2563eb', '#8b5cf6', '#ec4899', '#fbbf24', '#ffffff', '#38bdf8', '#4ade80'];
 
-    // Spawn 5 cracker explosion bursts across the canvas
-    const burstCenters = [
-      { x: canvas.width * 0.5, y: canvas.height * 0.35 },
-      { x: canvas.width * 0.25, y: canvas.height * 0.3 },
-      { x: canvas.width * 0.75, y: canvas.height * 0.3 },
-      { x: canvas.width * 0.35, y: canvas.height * 0.5 },
-      { x: canvas.width * 0.65, y: canvas.height * 0.5 }
+    // Spawn 5 multi-wave cracker explosions across the extended 7-second celebration (+3s added)
+    const waves = [
+      // Wave 1: Immediate initial bursts (0s - 0.8s)
+      { delay: 0, x: canvas.width * 0.5, y: canvas.height * 0.35, count: 45 },
+      { delay: 150, x: canvas.width * 0.25, y: canvas.height * 0.3, count: 40 },
+      { delay: 300, x: canvas.width * 0.75, y: canvas.height * 0.3, count: 40 },
+      { delay: 500, x: canvas.width * 0.4, y: canvas.height * 0.5, count: 35 },
+      { delay: 700, x: canvas.width * 0.6, y: canvas.height * 0.5, count: 35 },
+
+      // Wave 2: Mid-air secondary fireworks (1.3s - 2.0s)
+      { delay: 1300, x: canvas.width * 0.3, y: canvas.height * 0.25, count: 40 },
+      { delay: 1600, x: canvas.width * 0.7, y: canvas.height * 0.28, count: 40 },
+      { delay: 1900, x: canvas.width * 0.5, y: canvas.height * 0.4, count: 45 },
+
+      // Wave 3: Golden sparkler bursts (2.5s - 3.4s)
+      { delay: 2500, x: canvas.width * 0.2, y: canvas.height * 0.38, count: 40 },
+      { delay: 2900, x: canvas.width * 0.8, y: canvas.height * 0.35, count: 40 },
+      { delay: 3300, x: canvas.width * 0.5, y: canvas.height * 0.3, count: 45 },
+
+      // Wave 4: Grand celebratory cascades (3.8s - 4.8s)
+      { delay: 3800, x: canvas.width * 0.35, y: canvas.height * 0.32, count: 45 },
+      { delay: 4200, x: canvas.width * 0.65, y: canvas.height * 0.32, count: 45 },
+      { delay: 4600, x: canvas.width * 0.5, y: canvas.height * 0.45, count: 50 },
+
+      // Wave 5: Finale sparkle rockets (5.0s - 5.8s)
+      { delay: 5100, x: canvas.width * 0.28, y: canvas.height * 0.28, count: 40 },
+      { delay: 5400, x: canvas.width * 0.72, y: canvas.height * 0.28, count: 40 },
+      { delay: 5700, x: canvas.width * 0.5, y: canvas.height * 0.35, count: 55 }
     ];
 
-    burstCenters.forEach((center, burstIdx) => {
-      const count = 40;
-      for (let i = 0; i < count; i++) {
+    waves.forEach(w => {
+      for (let i = 0; i < w.count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 12 + 4;
+        const speed = Math.random() * 11 + 3.5;
         particles.push({
-          x: center.x,
-          y: center.y,
+          x: w.x,
+          y: w.y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           color: colors[Math.floor(Math.random() * colors.length)],
-          radius: Math.random() * 4 + 2,
+          radius: Math.random() * 3.8 + 2,
           alpha: 1,
-          decay: Math.random() * 0.015 + 0.008,
-          gravity: 0.18,
-          delay: burstIdx * 150 // staggered bursts
+          decay: Math.random() * 0.012 + 0.007,
+          gravity: 0.16,
+          delay: w.delay
         });
       }
     });
@@ -372,7 +392,7 @@ class KioskApp {
 
       particles.forEach(p => {
         if (elapsed < p.delay) return;
-        p.vx *= 0.98;
+        p.vx *= 0.982;
         p.vy += p.gravity;
         p.x += p.vx;
         p.y += p.vy;
@@ -392,7 +412,8 @@ class KioskApp {
         }
       });
 
-      if (aliveCount > 0 && elapsed < 4000) {
+      // Runs for full 7000ms (+3 seconds extra celebration)
+      if (aliveCount > 0 && elapsed < 7000) {
         animId = requestAnimationFrame(render);
       } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -698,6 +719,17 @@ class KioskApp {
         if (window.opifSdgEngine) window.opifSdgEngine.startQuiz();
       });
     }
+
+    [cardTrivia, cardChain, cardCsrCheck, cardSdg].forEach(card => {
+      if (card) {
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      }
+    });
 
     // Result Screen Actions
     const btnPlayAgain = document.getElementById('result-btn-play-again');

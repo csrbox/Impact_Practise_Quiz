@@ -81,7 +81,7 @@ class SdgQuizEngine {
       visualTile.style.background = q.bgGradient || q.color;
       visualTile.innerHTML = `
         <div class="sdg-tile-badge">
-          <span>UN GLOBAL GOAL • CHALLENGE ${this.currentIndex + 1} OF 3</span>
+          <span>UN GLOBAL GOAL • CHALLENGE ${this.currentIndex + 1} OF ${this.questions.length}</span>
         </div>
         <div class="sdg-tile-emblem">
           ${q.svgEmblem}
@@ -122,7 +122,7 @@ class SdgQuizEngine {
     if (nextBtn) {
       nextBtn.style.display = 'none';
       nextBtn.innerHTML = this.currentIndex === this.questions.length - 1 
-        ? 'FINISH CHALLENGE (3 MARKS) <i class="bi bi-trophy-fill"></i>' 
+        ? `FINISH CHALLENGE (${this.questions.length} MARKS) <i class="bi bi-trophy-fill"></i>` 
         : 'NEXT GOAL <i class="bi bi-arrow-right"></i>';
     }
 
@@ -219,10 +219,11 @@ class SdgQuizEngine {
 
   finishQuiz() {
     this.clearScreenReflection();
-    const customMsg = this.score === 3
-      ? "Outstanding SDG awareness! You mastered all 3 Global Goals."
-      : `You scored ${this.score} out of 3. Great effort exploring the UN Global Goals!`;
-    window.opifApp.showResults('Guess The SDG', this.score, this.questions.length, customMsg);
+    const totalQ = this.questions.length || 5;
+    const customMsg = this.score === totalQ
+      ? `Outstanding SDG awareness! You mastered all ${totalQ} Global Goals.`
+      : `You scored ${this.score} out of ${totalQ}. Great effort exploring the UN Global Goals!`;
+    window.opifApp.showResults('Guess The SDG', this.score, totalQ, customMsg);
   }
 
   bindEvents() {

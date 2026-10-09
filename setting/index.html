@@ -78,9 +78,6 @@
     <div class="header-inner">
       <div class="brand-wrapper" onclick="window.location.href='../index.html'" style="cursor: pointer;" title="Return to Quiz Home">
         <img src="../assets/impact-practice-logo.png" alt="Impact Practice Logo" class="logo-main">
-        <div class="header-partner">
-          <img src="../assets/csrbox.png" alt="CSRBOX" class="partner-logo">
-        </div>
       </div>
 
       <div class="header-pills">
@@ -170,7 +167,7 @@
           <div>
             <div class="d-flex align-items-center gap-2">
               <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">4. Guess The SDG</strong>
-              <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill small">3 Goals</span>
+              <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill small">5 Goals</span>
             </div>
             <div class="text-muted small mt-1">UN Sustainable Development Goals visual recognition.</div>
           </div>
@@ -179,6 +176,35 @@
           <input class="form-check-input" type="checkbox" id="setting-toggle-sdg" checked>
         </div>
       </div>
+    </div>
+
+    <!-- Attendee Leads Export Card (No Password Required) -->
+    <div class="settings-card shadow-sm mt-3" style="border-radius: 24px; padding: 24px;">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <div style="width: 38px; height: 38px; border-radius: 12px; background: #ecfdf5; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #059669; flex-shrink: 0;">
+            <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+          </div>
+          <div>
+            <strong class="font-heading" style="font-size: 16px; color: var(--brand-navy);">Export Attendee Leads (Excel / CSV)</strong>
+            <div class="text-muted small">Instant download of all stall participant records with scores & contact details.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 d-flex flex-wrap align-items-center justify-content-between gap-3 p-3" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px;">
+        <div>
+          <div class="fw-bold" style="font-size: 14.5px; color: var(--brand-navy);" id="setting-export-count-label">
+            Checking attendee records...
+          </div>
+          <div class="text-muted small" style="font-size: 12px;">Direct Download • <strong>No password required</strong></div>
+        </div>
+        <button type="button" class="btn btn-success px-4 py-2 font-heading fw-bold d-inline-flex align-items-center gap-2 rounded-pill shadow-sm" id="btn-export-xlsx">
+          <i class="bi bi-download"></i> Export Leads (Excel/CSV)
+        </button>
+      </div>
+    </div>
+
     <!-- Cloud Database (Firebase Realtime Database) Sync Card -->
     <div class="settings-card shadow-sm mt-3" style="border-radius: 24px; padding: 24px;">
       <div class="d-flex align-items-center justify-content-between mb-2">
@@ -207,6 +233,19 @@
         <div class="text-muted small mt-2" style="font-size: 12px;">
           <i class="bi bi-info-circle text-primary"></i> <strong>How to set up:</strong> Go to <a href="https://console.firebase.google.com/" target="_blank" class="fw-bold">console.firebase.google.com</a> &rarr; Create Project &rarr; Build &rarr; Realtime Database (Test mode) &rarr; Copy the URL and paste above.
         </div>
+      </div>
+    </div>
+
+    <!-- Clear Stall Data Maintenance Card (Password Required: 333) -->
+    <div class="settings-card shadow-sm mt-3" style="border-radius: 24px; padding: 24px; border: 1.5px solid #fee2e2;">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+          <strong class="font-heading text-danger" style="font-size: 15px;">Clear Stall Data</strong>
+          <div class="text-muted small">Permanently clear attendee records from local cache & cloud database.</div>
+        </div>
+        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 font-heading" id="btn-clear-stall-data">
+          <i class="bi bi-trash3"></i> Clear Data (PIN: 333)
+        </button>
       </div>
     </div>
   </main>
@@ -267,6 +306,91 @@
       }
     }
 
+    async function loadAttendeeRecords() {
+      let records = [];
+      try {
+        if (window.FirebaseSync) {
+          records = await window.FirebaseSync.fetchRecords();
+        } else {
+          records = JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]');
+        }
+      } catch (e) {
+        records = JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]');
+      }
+      records = (records || []).filter(r => r && typeof r === 'object' && r.name);
+      const countEl = document.getElementById('setting-export-count-label');
+      if (countEl) {
+        countEl.textContent = `${records.length} Attendee Record${records.length === 1 ? '' : 's'} Ready to Export`;
+      }
+      return records;
+    }
+
+    async function exportLeadsFile() {
+      const records = await loadAttendeeRecords();
+      if (!records || records.length === 0) {
+        alert("No attendee records available to export yet. Please play a quiz first.");
+        return;
+      }
+
+      const headers = [
+        "S.No",
+        "Date & Time",
+        "Full Name",
+        "Email Address",
+        "Phone Number",
+        "Organization Type",
+        "Organization Name",
+        "Game Played",
+        "Score",
+        "Max Score",
+        "Percentage",
+        "Result Status"
+      ];
+
+      const escapeCsv = (val) => {
+        if (val === null || val === undefined) return '""';
+        const str = String(val).replace(/"/g, '""');
+        return `"${str}"`;
+      };
+
+      const rows = records.map((r, idx) => {
+        const score = Number(r.score) || 0;
+        const maxScore = Number(r.maxScore) || 5;
+        const pct = Math.round((score / maxScore) * 100);
+        const status = score === maxScore ? "Champion" : pct >= 60 ? "Proficient" : "Participant";
+        const dateStr = r.timestamp ? new Date(r.timestamp).toLocaleString('en-IN') : new Date().toLocaleString('en-IN');
+        return [
+          idx + 1,
+          escapeCsv(dateStr),
+          escapeCsv(r.name || 'Guest'),
+          escapeCsv(r.email || ''),
+          escapeCsv(r.phone || ''),
+          escapeCsv(r.orgType || 'Profit'),
+          escapeCsv(r.company || ''),
+          escapeCsv(r.game || 'Trivia Quiz'),
+          score,
+          maxScore,
+          `${pct}%`,
+          escapeCsv(status)
+        ].join(',');
+      });
+
+      // UTF-8 BOM (\uFEFF) ensures Excel opens without encoding issues
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const datePart = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `OPIF_Impact_Practice_Attendee_Leads_${datePart}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast("Attendee leads exported successfully!");
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const settings = getSettings();
 
@@ -281,6 +405,7 @@
       if (toggleSdg) toggleSdg.checked = settings.sdg;
 
       updateSummaryText(settings);
+      loadAttendeeRecords();
 
       function handleToggleChange() {
         const newSettings = {
@@ -305,6 +430,34 @@
       if (toggleCsrCheck) toggleCsrCheck.addEventListener('change', handleToggleChange);
       if (toggleSdg) toggleSdg.addEventListener('change', handleToggleChange);
 
+      // Export XLSX Button (NO PASSWORD REQUIRED)
+      const exportBtn = document.getElementById('btn-export-xlsx');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          exportLeadsFile();
+        });
+      }
+
+      // Clear Stall Data Button (PASSWORD REQUIRED: 333)
+      const clearBtn = document.getElementById('btn-clear-stall-data');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', async () => {
+          const pin = prompt("Enter Organizer Passcode to clear stall data:");
+          if (pin === ORGANIZER_PIN || pin === "opif2026") {
+            if (confirm("Are you sure you want to permanently clear all attendee records from the stall? This cannot be undone.")) {
+              if (window.FirebaseSync) {
+                await window.FirebaseSync.clearAll();
+              }
+              localStorage.removeItem(RECORDS_KEY);
+              await loadAttendeeRecords();
+              showToast("All stall data cleared successfully.");
+            }
+          } else if (pin !== null) {
+            alert("Incorrect organizer passcode.");
+          }
+        });
+      }
+
       // Firebase Sync URL Binding
       const fbUrlInput = document.getElementById('setting-firebase-url');
       const fbSaveBtn = document.getElementById('setting-firebase-save-btn');
@@ -322,6 +475,7 @@
             window.FirebaseSync.setUrl(val);
           }
           showToast('Firebase Database URL updated!');
+          loadAttendeeRecords();
         });
       }
     });

@@ -124,62 +124,43 @@ const CSR_CHECK_QUESTIONS = [
   }
 ];
 
-// GAME 4: GUESS THE SDG (3 Official UN Sustainable Development Goals • 3 Marks)
+// GAME 4: GUESS THE SDG (5 Official UN Sustainable Development Goals • 5 Marks)
+// Goals: 17, 13, 10, 7, 6 from https://globalgoals.org/goals/
 const SDG_GAME_QUESTIONS = [
   {
     id: "sdg-q1",
-    goalNumber: 5,
-    title: "Goal 5",
-    goalName: "Gender Equality",
-    color: "#EF402B",
-    bgGradient: "linear-gradient(135deg, #EF402B 0%, #D82F1C 100%)",
+    goalNumber: 17,
+    title: "Goal 17",
+    goalName: "Partnerships for the Goals",
+    color: "#19486A",
+    bgGradient: "linear-gradient(135deg, #19486A 0%, #0d283c 100%)",
     svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="120" height="120" rx="18" fill="#EF402B"/>
-      <circle cx="60" cy="54" r="24" stroke="#FFFFFF" stroke-width="6.5" fill="none"/>
-      <!-- Equal bars inside circle -->
-      <rect x="47" y="47" width="26" height="5.5" rx="2" fill="#FFFFFF"/>
-      <rect x="47" y="56" width="26" height="5.5" rx="2" fill="#FFFFFF"/>
-      <!-- Male arrow top right -->
-      <path d="M78 36L94 20M94 20H82M94 20V32" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- Female cross bottom -->
-      <path d="M60 78V98M50 88H70" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round"/>
+      <rect width="120" height="120" rx="18" fill="#19486A"/>
+      <circle cx="60" cy="60" r="14" fill="#FFFFFF"/>
+      <circle cx="60" cy="60" r="32" stroke="#FFFFFF" stroke-width="4.5" stroke-dasharray="10 6" fill="none"/>
+      <circle cx="60" cy="28" r="8" fill="#FFFFFF"/>
+      <circle cx="88" cy="44" r="8" fill="#FFFFFF"/>
+      <circle cx="88" cy="76" r="8" fill="#FFFFFF"/>
+      <circle cx="60" cy="92" r="8" fill="#FFFFFF"/>
+      <circle cx="32" cy="76" r="8" fill="#FFFFFF"/>
+      <circle cx="32" cy="44" r="8" fill="#FFFFFF"/>
+      <line x1="60" y1="36" x2="60" y2="46" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="60" y1="74" x2="60" y2="84" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="81" y1="48" x2="72" y2="54" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="39" y1="48" x2="48" y2="54" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
     </svg>`,
     question: "Identify this UN Sustainable Development Goal:",
     options: [
-      "SDG 5: Gender Equality",
-      "SDG 10: Reduced Inequalities",
-      "SDG 4: Quality Education",
-      "SDG 3: Good Health & Well-being"
+      "Partnerships for the Goals",
+      "Peace, Justice and Strong Institutions",
+      "Industry, Innovation and Infrastructure",
+      "Decent Work and Economic Growth"
     ],
     correctAnswer: 0,
-    explanation: "Spot on! SDG 5 stands for Gender Equality — aiming to end all forms of discrimination against women and girls everywhere, ensuring full participation in economic and public life."
+    explanation: "Spot on! Goal 17 represents Partnerships for the Goals — strengthening the means of implementation and revitalizing global multi-stakeholder partnerships between governments, corporates, and civil society."
   },
   {
     id: "sdg-q2",
-    goalNumber: 6,
-    title: "Goal 6",
-    goalName: "Clean Water and Sanitation",
-    color: "#26BDE2",
-    bgGradient: "linear-gradient(135deg, #26BDE2 0%, #009BBF 100%)",
-    svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="120" height="120" rx="18" fill="#26BDE2"/>
-      <!-- Drinking glass container -->
-      <path d="M36 34L44 94C44.5 97 47 99 50 99H70C73 99 75.5 97 76 94L84 34H36Z" stroke="#FFFFFF" stroke-width="6.5" stroke-linejoin="round" fill="none"/>
-      <!-- Water Droplet falling inside -->
-      <path d="M60 44C60 44 48 60 48 70C48 76.6 53.4 82 60 82C66.6 82 72 76.6 72 70C72 60 60 44 60 44Z" fill="#FFFFFF"/>
-    </svg>`,
-    question: "Identify this UN Sustainable Development Goal:",
-    options: [
-      "SDG 14: Life Below Water",
-      "SDG 6: Clean Water & Sanitation",
-      "SDG 7: Affordable & Clean Energy",
-      "SDG 12: Responsible Consumption"
-    ],
-    correctAnswer: 1,
-    explanation: "Spot on! SDG 6 represents Clean Water and Sanitation — dedicated to achieving universal and equitable access to safe, affordable drinking water and adequate sanitation for all."
-  },
-  {
-    id: "sdg-q3",
     goalNumber: 13,
     title: "Goal 13",
     goalName: "Climate Action",
@@ -187,22 +168,90 @@ const SDG_GAME_QUESTIONS = [
     bgGradient: "linear-gradient(135deg, #3F7E44 0%, #2A5A2E 100%)",
     svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="120" height="120" rx="18" fill="#3F7E44"/>
-      <!-- Outer eye shape -->
-      <path d="M22 60C34 42 86 42 98 60C86 78 34 78 22 60Z" stroke="#FFFFFF" stroke-width="6.5" fill="none" stroke-linejoin="round"/>
-      <!-- Inner Earth Globe with meridian lines -->
-      <circle cx="60" cy="60" r="16" fill="#FFFFFF"/>
-      <ellipse cx="60" cy="60" rx="8" ry="16" stroke="#3F7E44" stroke-width="3" fill="none"/>
-      <line x1="44" y1="60" x2="76" y2="60" stroke="#3F7E44" stroke-width="3"/>
+      <path d="M20 60C32 40 88 40 100 60C88 80 32 80 20 60Z" stroke="#FFFFFF" stroke-width="6.5" fill="none" stroke-linejoin="round"/>
+      <circle cx="60" cy="60" r="17" fill="#FFFFFF"/>
+      <ellipse cx="60" cy="60" rx="8.5" ry="17" stroke="#3F7E44" stroke-width="3.2" fill="none"/>
+      <line x1="43" y1="60" x2="77" y2="60" stroke="#3F7E44" stroke-width="3.2"/>
     </svg>`,
     question: "Identify this UN Sustainable Development Goal:",
     options: [
-      "SDG 15: Life On Land",
-      "SDG 11: Sustainable Cities",
-      "SDG 7: Affordable Clean Energy",
-      "SDG 13: Climate Action"
+      "Life on Land",
+      "Sustainable Cities and Communities",
+      "Affordable and Clean Energy",
+      "Climate Action"
     ],
     correctAnswer: 3,
-    explanation: "Spot on! SDG 13 represents Climate Action — urging immediate collective intervention to mitigate greenhouse gases, strengthen climate resilience, and build green capacities."
+    explanation: "Spot on! Goal 13 represents Climate Action — urging urgent collective intervention to cut greenhouse gas emissions, build climate resilience, and integrate climate measures into policies."
+  },
+  {
+    id: "sdg-q3",
+    goalNumber: 10,
+    title: "Goal 10",
+    goalName: "Reduced Inequalities",
+    color: "#DD1367",
+    bgGradient: "linear-gradient(135deg, #DD1367 0%, #A50D4C 100%)",
+    svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="18" fill="#DD1367"/>
+      <circle cx="60" cy="60" r="36" stroke="#FFFFFF" stroke-width="6" fill="none"/>
+      <rect x="36" y="48" width="48" height="8" rx="3" fill="#FFFFFF"/>
+      <rect x="36" y="64" width="48" height="8" rx="3" fill="#FFFFFF"/>
+      <path d="M26 60L16 60M16 60L21 54M16 60L21 66" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M94 60L104 60M104 60L99 54M104 60L99 66" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+    question: "Identify this UN Sustainable Development Goal:",
+    options: [
+      "Reduced Inequalities",
+      "Gender Equality",
+      "No Poverty",
+      "Zero Hunger"
+    ],
+    correctAnswer: 0,
+    explanation: "Spot on! Goal 10 represents Reduced Inequalities — striving to reduce income disparities, empower marginalized communities, and promote social, economic, and political inclusion for all."
+  },
+  {
+    id: "sdg-q4",
+    goalNumber: 7,
+    title: "Goal 7",
+    goalName: "Affordable and Clean Energy",
+    color: "#FCC30B",
+    bgGradient: "linear-gradient(135deg, #FCC30B 0%, #D49C00 100%)",
+    svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="18" fill="#FCC30B"/>
+      <circle cx="60" cy="60" r="18" fill="#FFFFFF"/>
+      <path d="M60 22V36M60 84V98M22 60H36M84 60H98M33 33L43 43M77 77L87 87M33 87L43 77M77 43L87 33" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+      <path d="M57 52L52 62H62L58 70L68 59H59L62 52H57Z" fill="#FCC30B"/>
+    </svg>`,
+    question: "Identify this UN Sustainable Development Goal:",
+    options: [
+      "Responsible Consumption and Production",
+      "Affordable and Clean Energy",
+      "Industry, Innovation and Infrastructure",
+      "Good Health and Well-being"
+    ],
+    correctAnswer: 1,
+    explanation: "Spot on! Goal 7 represents Affordable and Clean Energy — ensuring universal access to affordable, reliable, sustainable and modern energy services, accelerating renewable energy adoption."
+  },
+  {
+    id: "sdg-q5",
+    goalNumber: 6,
+    title: "Goal 6",
+    goalName: "Clean Water and Sanitation",
+    color: "#26BDE2",
+    bgGradient: "linear-gradient(135deg, #26BDE2 0%, #009BBF 100%)",
+    svgEmblem: `<svg viewBox="0 0 120 120" width="100" height="100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="18" fill="#26BDE2"/>
+      <path d="M34 32L43 94C43.5 97 46 99 49 99H71C74 99 76.5 97 77 94L86 32H34Z" stroke="#FFFFFF" stroke-width="6.5" stroke-linejoin="round" fill="none"/>
+      <path d="M60 42C60 42 47 59 47 70C47 77.2 52.8 83 60 83C67.2 83 73 77.2 73 70C73 59 60 42 60 42Z" fill="#FFFFFF"/>
+    </svg>`,
+    question: "Identify this UN Sustainable Development Goal:",
+    options: [
+      "Life Below Water",
+      "Clean Water and Sanitation",
+      "Quality Education",
+      "Sustainable Cities and Communities"
+    ],
+    correctAnswer: 1,
+    explanation: "Spot on! Goal 6 represents Clean Water and Sanitation — dedicated to achieving universal access to safe, affordable drinking water and adequate sanitation, protecting freshwater ecosystems."
   }
 ];
 

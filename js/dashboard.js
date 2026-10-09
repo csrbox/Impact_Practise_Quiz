@@ -92,11 +92,12 @@ class KioskDashboard {
   }
 
   getGameBadgeClass(gameName) {
-    if (gameName === 'Trivia Quiz' || gameName === 'CSR Quiz') return 'bg-primary-subtle text-primary border border-primary-subtle';
-    if (gameName === 'Build the Chain') return 'bg-success-subtle text-success border border-success-subtle';
-    if (gameName === 'CSR or not-CSR?') return 'bg-purple-subtle text-purple border border-purple-subtle';
-    if (gameName === 'Guess The SDG') return 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
-    return 'bg-secondary-subtle text-secondary';
+    const name = (gameName || '').trim();
+    if (name === 'Trivia Quiz' || name === 'CSR Quiz') return 'badge-game-trivia';
+    if (name === 'Build the Chain') return 'badge-game-chain';
+    if (name === 'CSR or not-CSR?') return 'badge-game-csrcheck';
+    if (name === 'Guess The SDG') return 'badge-game-sdg';
+    return 'badge-game-default';
   }
 
   renderLeaderboardTable(records) {
@@ -119,17 +120,21 @@ class KioskDashboard {
     records.slice(0, 100).forEach((r, idx) => {
       const isPerfect = Number(r.score) > 0 && Number(r.score) === Number(r.maxScore);
       const sNo = idx + 1;
-      let gameTitle = (r.game && typeof r.game === 'string' && r.game.trim() && r.game !== 'undefined' && r.game !== 'null') 
+      let rawGame = (r.game && typeof r.game === 'string' && r.game.trim() && r.game !== 'undefined' && r.game !== 'null') 
         ? r.game.trim() 
-        : 'Trivia Quiz';
+        : '';
+      
+      // Fallback: If game field is empty in historic record, detect from maxScore
+      if (!rawGame) {
+        if (Number(r.maxScore) === 3) rawGame = 'Guess The SDG';
+        else rawGame = 'CSR or not-CSR?';
+      }
+      const gameTitle = rawGame;
 
       const row = document.createElement('tr');
 
-      // Rank Medal for Top 3
-      let rankDisplay = `${sNo}`;
-      if (sNo === 1) rankDisplay = `<span class="badge bg-warning text-dark px-2 py-1 rounded-pill fw-bold">🥇 1</span>`;
-      else if (sNo === 2) rankDisplay = `<span class="badge bg-secondary-subtle text-dark px-2 py-1 rounded-pill fw-bold">🥈 2</span>`;
-      else if (sNo === 3) rankDisplay = `<span class="badge bg-warning-subtle text-dark px-2 py-1 rounded-pill fw-bold">🥉 3</span>`;
+      // Plain normal index number (no gold, silver, medals or emojis)
+      const rankDisplay = `<strong style="color: var(--brand-navy); font-size: 14.5px;">${sNo}</strong>`;
 
       // Company / Org Subtitle
       let companySubtitle = '';
