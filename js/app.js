@@ -580,11 +580,12 @@ class KioskApp {
     let bypassClicks = 0;
     let lastBypassClick = 0;
     let bypassTriggered = false;
+    let validationDebounceTimer = null;
     const submitBtn = document.getElementById('btn-submit-details');
     if (submitBtn) {
       submitBtn.addEventListener('click', (e) => {
         const now = Date.now();
-        if (now - lastBypassClick < 1200) {
+        if (now - lastBypassClick < 900) {
           bypassClicks++;
         } else {
           bypassClicks = 1;
@@ -594,6 +595,7 @@ class KioskApp {
         if (bypassClicks >= 3) {
           e.preventDefault();
           e.stopPropagation();
+          clearTimeout(validationDebounceTimer);
           bypassTriggered = true;
           bypassClicks = 0;
           this.playFanfare();
@@ -635,55 +637,62 @@ class KioskApp {
       detailsForm.addEventListener('submit', (e) => {
         e.preventDefault();
         if (bypassTriggered) return;
-        const nameInput = document.getElementById('participant-name');
-        const emailInput = document.getElementById('participant-email');
-        const phoneInput = document.getElementById('participant-phone');
-        const companyInput = document.getElementById('participant-company');
-        const orgTypeRadio = document.querySelector('input[name="participant-org-type"]:checked');
-        const phoneError = document.getElementById('participant-phone-error');
 
-        let valid = true;
-        nameInput.classList.remove('is-invalid');
-        emailInput.classList.remove('is-invalid');
-        if (phoneInput) phoneInput.classList.remove('is-invalid');
+        // Debounce validation so multi-clicks on the spot don't immediately shift layout or buzz error
+        clearTimeout(validationDebounceTimer);
+        validationDebounceTimer = setTimeout(() => {
+          if (bypassTriggered || bypassClicks >= 3) return;
 
-        if (!nameInput.value.trim()) {
-          nameInput.classList.add('is-invalid');
-          valid = false;
-        }
+          const nameInput = document.getElementById('participant-name');
+          const emailInput = document.getElementById('participant-email');
+          const phoneInput = document.getElementById('participant-phone');
+          const companyInput = document.getElementById('participant-company');
+          const orgTypeRadio = document.querySelector('input[name="participant-org-type"]:checked');
+          const phoneError = document.getElementById('participant-phone-error');
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
-          emailInput.classList.add('is-invalid');
-          valid = false;
-        }
+          let valid = true;
+          nameInput.classList.remove('is-invalid');
+          emailInput.classList.remove('is-invalid');
+          if (phoneInput) phoneInput.classList.remove('is-invalid');
 
-        // 10-digit Phone Validation (if entered)
-        if (phoneInput && phoneInput.value.trim().length > 0) {
-          const digitsOnly = phoneInput.value.trim().replace(/\D/g, '');
-          if (digitsOnly.length !== 10) {
-            phoneInput.classList.add('is-invalid');
-            if (phoneError) phoneError.textContent = "Phone number must be exactly 10 digits.";
+          if (!nameInput.value.trim()) {
+            nameInput.classList.add('is-invalid');
             valid = false;
           }
-        }
 
-        if (!valid) {
-          this.playWrong();
-          return;
-        }
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
+            emailInput.classList.add('is-invalid');
+            valid = false;
+          }
 
-        this.playTap();
-        const selectedOrgType = orgTypeRadio ? orgTypeRadio.value : "Profit";
-        const companyName = companyInput ? companyInput.value.trim() : "";
-        this.saveParticipantDetails(
-          nameInput.value,
-          emailInput.value,
-          phoneInput ? phoneInput.value.trim() : "",
-          selectedOrgType,
-          companyName
-        );
-        this.showScreen('screen-selection');
+          // 10-digit Phone Validation (if entered)
+          if (phoneInput && phoneInput.value.trim().length > 0) {
+            const digitsOnly = phoneInput.value.trim().replace(/\D/g, '');
+            if (digitsOnly.length !== 10) {
+              phoneInput.classList.add('is-invalid');
+              if (phoneError) phoneError.textContent = "Phone number must be exactly 10 digits.";
+              valid = false;
+            }
+          }
+
+          if (!valid) {
+            this.playWrong();
+            return;
+          }
+
+          this.playTap();
+          const selectedOrgType = orgTypeRadio ? orgTypeRadio.value : "Profit";
+          const companyName = companyInput ? companyInput.value.trim() : "";
+          this.saveParticipantDetails(
+            nameInput.value,
+            emailInput.value,
+            phoneInput ? phoneInput.value.trim() : "",
+            selectedOrgType,
+            companyName
+          );
+          this.showScreen('screen-selection');
+        }, 280);
       });
     }
 

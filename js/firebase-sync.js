@@ -7,6 +7,8 @@ const FIREBASE_DEFAULT_URL = "https://opif-b6f33-default-rtdb.firebaseio.com";
 const STORAGE_KEY_FIREBASE = "OPIF_FIREBASE_URL";
 const STORAGE_KEY_RECORDS = "OPIF_QUIZ_RECORDS";
 
+const DB_COLLECTION = "records";
+
 const FirebaseSync = {
   /**
    * Get active Firebase Database endpoint URL
@@ -58,7 +60,7 @@ const FirebaseSync = {
     if (!baseUrl) return;
 
     try {
-      const endpoint = `${baseUrl}/participants/${record.id}.json`;
+      const endpoint = `${baseUrl}/${DB_COLLECTION}/${record.id}.json`;
       const res = await fetch(endpoint, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -83,7 +85,7 @@ const FirebaseSync = {
 
     if (baseUrl) {
       try {
-        const endpoint = `${baseUrl}/participants.json`;
+        const endpoint = `${baseUrl}/${DB_COLLECTION}.json`;
         const res = await fetch(endpoint, { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
@@ -113,7 +115,7 @@ const FirebaseSync = {
 
       if (unSynced.length > 0 && baseUrl) {
         unSynced.forEach(rec => {
-          fetch(`${baseUrl}/participants/${rec.id}.json`, {
+          fetch(`${baseUrl}/${DB_COLLECTION}/${rec.id}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(rec)
@@ -147,7 +149,7 @@ const FirebaseSync = {
     const baseUrl = this.getUrl();
     if (baseUrl) {
       try {
-        await fetch(`${baseUrl}/participants.json`, { method: "DELETE" });
+        await fetch(`${baseUrl}/${DB_COLLECTION}.json`, { method: "DELETE" });
       } catch (e) {
         console.warn("[FirebaseSync] Cloud delete error:", e);
       }
